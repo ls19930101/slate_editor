@@ -1,0 +1,58 @@
+.customEditor {
+  margin: auto;
+  position: relative;
+  color: #333;
+}
+
+.readonly {
+  border: none;
+}
+.editor {
+  padding: 24px;
+  min-height: 500px;
+  overflow: auto;
+  ol,
+  ul,
+  dl {
+    padding-left: 1.2em;
+  }
+}
+// .p {
+//   position: relative;
+//   word-break: break-all;
+//   word-break: break-word;
+// }
+.quote {
+  border-left: 2px solid #ddd;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 10px;
+  color: #aaa;
+  font-size: italic;
+}
+.placeholder {
+  opacity: 1;
+  z-index: -1;
+  position: absolute;
+  color: #bfbfbf;
+  top: 0;
+  user-select: none;
+  left: 1px;
+  animation: fade-in 0.3s ease-in;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: inline-block;
+  pointer-events: none;
+}
+.unShow {
+  opacity: 0;
+}
+.slate-code {
+  background-color: #f7f7f7;
+  padding: '3px 8px';
+  margin: '0 4px';
+  border: '1px solid #e5e5e5';
+  border-radius: '3px';
+  word-break: 'break-all';
+}

@@ -1,0 +1,26 @@
+---
+name: CustomEditor
+---
+
+import { Playground, Props } from 'docz';
+import { useState } from 'react';
+import CustomEditor from './';
+
+<Playground>
+  {()=>{
+  const [value,setValue]=useState(
+   JSON.parse('[{"children":[{"text":"2"}]}]'),
+  );
+  const [readOnly,setReadOnly]=useState(false)
+
+
+      return <div>
+
+        <CustomEditor value={value} onChange={newValue=>setValue(newValue)} style={{height:500}} readOnly={readOnly}/>
+          <button onClick={()=>setReadOnly(!readOnly)}>toggle</button>
+      </div>
+
+}}
+
+</Playground>
+

@@ -1,0 +1,10 @@
+export * from './insertTable';
+export * from './insertBelow';
+export * from './insertAbove';
+export * from './insertRight';
+export * from './insertLeft';
+export * from './removeCol';
+// export * from './mergeSelection';
+// export * from './splitCell';
+export * from './removeRow';
+export * from './removeTable';
