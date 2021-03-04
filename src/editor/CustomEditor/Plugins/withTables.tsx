@@ -1,10 +1,10 @@
-import { Editor, Element, Node, Path, Point, Range, Transforms } from 'slate';
+import { Editor, Element, Node, Path, Point, Range, Transforms } from "slate";
 
-import { ReactEditor } from 'slate-react';
-import { v4 as uuid } from 'uuid';
+import { ReactEditor } from "slate-react";
+import { v4 as uuid } from "uuid";
 
 const withTables = (editor: ReactEditor) => {
-  const { addMark, removeMark, insertText, deleteBackward, deleteFragment } = editor;
+  const { insertText, deleteBackward, deleteFragment } = editor;
 
   // editor.addMark = (key, value) => {
   //   console.log('2');
@@ -83,11 +83,14 @@ const withTables = (editor: ReactEditor) => {
 
     if (!selection || !ReactEditor.isFocused(editor)) return;
 
-    const [table] = Editor.nodes(editor, { at: selection, match: (n) => n.type === 'table' });
+    const [table] = Editor.nodes(editor, {
+      at: selection,
+      match: (n) => n.type === "table",
+    });
     const isCollapsed = Range.isCollapsed(selection);
 
     if (table && !isCollapsed) {
-      console.log('out');
+      console.log("out");
       return;
     }
 
@@ -101,12 +104,12 @@ const withTables = (editor: ReactEditor) => {
 
     if (selection && Range.isCollapsed(selection)) {
       const isInTable = Editor.above(editor, {
-        match: (n) => n.type === 'table',
+        match: (n) => n.type === "table",
       });
 
       if (isInTable) {
         const currCell = Editor.above(editor, {
-          match: (n) => n.type === 'table-cell',
+          match: (n) => n.type === "table-cell",
         });
 
         const start = currCell && Editor.start(editor, currCell[1]);
@@ -121,18 +124,20 @@ const withTables = (editor: ReactEditor) => {
   };
 
   editor.deleteFragment = () => {
-    console.log('frag', isInSameTable(editor));
+    console.log("frag", isInSameTable(editor));
     const { selection } = editor;
 
     if (!selection) return;
 
     if (isInSameTable(editor)) {
-      const selectedCells = Editor.nodes(editor, { match: (n) => !!n.selectedCell });
+      const selectedCells = Editor.nodes(editor, {
+        match: (n) => !!n.selectedCell,
+      });
 
       for (let cell of selectedCells) {
         Transforms.setSelection(editor, Editor.range(editor, cell[1]));
         const [content] = Editor.nodes(editor, {
-          match: (n) => n.type === 'table-content',
+          match: (n) => n.type === "table-content",
         });
 
         Transforms.insertNodes(editor, createContent(), { at: content[1] });
@@ -141,7 +146,7 @@ const withTables = (editor: ReactEditor) => {
       return;
     }
     Transforms.removeNodes(editor, {
-      match: (n) => n.type === 'table',
+      match: (n) => n.type === "table",
     });
 
     deleteFragment();
@@ -156,12 +161,12 @@ export function isInSameTable(editor: Editor): boolean {
   const [start, end] = Editor.edges(editor, editor.selection);
   const [startTable] = Editor.nodes(editor, {
     at: start,
-    match: (n) => n.type === 'table',
+    match: (n) => n.type === "table",
   });
 
   const [endTable] = Editor.nodes(editor, {
     at: end,
-    match: (n) => n.type === 'table',
+    match: (n) => n.type === "table",
   });
 
   if (startTable && endTable) {
@@ -180,14 +185,14 @@ export function isInSameTable(editor: Editor): boolean {
 table中row，cell，content的类型
 */
 export interface Row extends Element {
-  type: 'table-row';
+  type: "table-row";
   key: string;
   data: any;
   children: Cell[];
 }
 
 export interface Cell extends Element {
-  type: 'table-cell';
+  type: "table-cell";
   key: string;
   rowspan?: number;
   colspan?: number;
@@ -197,17 +202,17 @@ export interface Cell extends Element {
   children: Node[];
 }
 
-export interface TableContent extends Element {
-  // type: 'table-content';
-  children: Node[];
-}
+// export interface TableContent extends Element {
+//   // type: 'table-content';
+//   children: Node[];
+// }
 
 /* 新增table */
 export function createTable(columns: number, rows: number): any {
   const rowNodes = [...new Array(rows)].map(() => createRow(columns));
 
   return {
-    type: 'table',
+    type: "table",
     children: rowNodes,
     data: {},
   };
@@ -218,7 +223,7 @@ export function createRow(columns: number): Row {
   const cellNodes = [...new Array(columns)].map(() => createCell());
 
   return {
-    type: 'table-row',
+    type: "table-row",
     key: `row_${uuid()}`,
     data: {},
     children: cellNodes,
@@ -242,7 +247,7 @@ export function createCell({
   const content = createContent(elements);
 
   return {
-    type: 'table-cell',
+    type: "table-cell",
     key: `cell_${uuid()}`,
     children: [content],
     width: width,
@@ -253,14 +258,14 @@ export function createCell({
 }
 
 export interface TableContent extends Element {
-  type: 'table-content';
+  type: "table-content";
   children: Node[];
 }
 
 export function createContent(elements?: Node[]): TableContent {
   return {
-    type: 'table-content',
-    children: elements || [{ type: 'paragraph', children: [{ text: '' }] }],
+    type: "table-content",
+    children: elements || [{ type: "paragraph", children: [{ text: "" }] }],
   };
 }
 export default withTables;

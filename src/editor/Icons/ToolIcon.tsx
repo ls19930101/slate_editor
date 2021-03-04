@@ -1,21 +1,21 @@
 import * as React from "react";
 
-import { ReactComponent as BoldSvg } from "../../assets/icons/bold.svg";
-import { ReactComponent as BulletedlistSvg } from "../../assets/icons/bulleted_list.svg";
-import { ReactComponent as CodeSvg } from "../../assets/icons/code.svg";
-import { ReactComponent as H1Svg } from "../../assets/icons/h1.svg";
-import { ReactComponent as H2Svg } from "../../assets/icons/h2.svg";
-import { ReactComponent as H3Svg } from "../../assets/icons/h3.svg";
+import { ReactComponent as BoldSvg } from "../assets/icons/bold.svg";
+import { ReactComponent as BulletedlistSvg } from "../assets/icons/bulleted_list.svg";
+import { ReactComponent as CodeSvg } from "../assets/icons/code.svg";
+import { ReactComponent as H1Svg } from "../assets/icons/h1.svg";
+import { ReactComponent as H2Svg } from "../assets/icons/h2.svg";
+import { ReactComponent as H3Svg } from "../assets/icons/h3.svg";
 import { IIconProps } from "./interfaces";
 import { Icon } from "antd";
-import { ReactComponent as ItalicSvg } from "../../assets/icons/italic.svg";
-import { ReactComponent as LinkSvg } from "../../assets/icons/link.svg";
-import { ReactComponent as NumberedlistSvg } from "../../assets/icons/numbered_list.svg";
-import { ReactComponent as ParagraphSvg } from "../../assets/icons/paragraph.svg";
-import { ReactComponent as QuoteSvg } from "../../assets/icons/quote.svg";
-import { ReactComponent as StrikethroughSvg } from "../../assets/icons/strike_through.svg";
-import { ReactComponent as TableSvg } from "../../assets/icons/table.svg";
-import { ReactComponent as UnderlineSvg } from "../../assets/icons/underline.svg";
+import { ReactComponent as ItalicSvg } from "../assets/icons/italic.svg";
+import { ReactComponent as LinkSvg } from "../assets/icons/link.svg";
+import { ReactComponent as NumberedlistSvg } from "../assets/icons/numbered_list.svg";
+import { ReactComponent as ParagraphSvg } from "../assets/icons/paragraph.svg";
+import { ReactComponent as QuoteSvg } from "../assets/icons/quote.svg";
+import { ReactComponent as StrikethroughSvg } from "../assets/icons/strike_through.svg";
+import { ReactComponent as TableSvg } from "../assets/icons/table.svg";
+import { ReactComponent as UnderlineSvg } from "../assets/icons/underline.svg";
 
 const DEFAULT_STYLE = {
   fontSize: "14px",

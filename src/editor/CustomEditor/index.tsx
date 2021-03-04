@@ -45,6 +45,7 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
       ),
     []
   ) as ReactEditor;
+
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 

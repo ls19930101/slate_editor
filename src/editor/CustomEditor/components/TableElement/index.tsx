@@ -1,19 +1,21 @@
-import './style.less';
+import "./style.less";
 
-import { Editor, NodeEntry, Transforms } from 'slate';
-import { HorizontalToolbar, VerticalToolbar } from './DragBar';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { ReactEditor, RenderElementProps, useEditor, useSelected } from 'slate-react';
-import { addSelection, removeSelection } from '../../components/TableTools/selection';
-import { debounce, throttle } from 'lodash';
+import { Editor, NodeEntry, Transforms } from "slate";
+import { HorizontalToolbar, VerticalToolbar } from "./DragBar";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { RenderElementProps, useEditor, useSelected } from "slate-react";
+import {
+  addSelection,
+  removeSelection,
+} from "../../components/TableTools/selection";
 
-import TableTools from '../TableTools';
-import { options } from './options';
-import { v4 as uuid } from 'uuid';
+import TableTools from "../TableTools";
+import { options } from "./options";
+import { v4 as uuid } from "uuid";
 
 export const TableComponent: React.FC<RenderElementProps> = memo(
   ({ attributes, children, element }) => {
-    const [startKey, setStartKey] = useState<string>('');
+    const [startKey, setStartKey] = useState<string>("");
 
     const selected = useSelected();
     const editor = useEditor();
@@ -23,7 +25,7 @@ export const TableComponent: React.FC<RenderElementProps> = memo(
 
     if (selected && editor.selection) {
       [table] = Editor.nodes(editor, {
-        match: (n) => n.type === 'table',
+        match: (n) => n.type === "table",
         at: Editor.path(editor, editor.selection),
       });
 
@@ -67,8 +69,12 @@ export const TableComponent: React.FC<RenderElementProps> = memo(
       }
     }, [selected, editor]);
     useEffect(() => {
-      if (!element['data-key']) {
-        Transforms.setNodes(editor, { 'data-key': uuid() }, { match: (n) => n.type === 'table' });
+      if (!element["data-key"]) {
+        Transforms.setNodes(
+          editor,
+          { "data-key": uuid() },
+          { match: (n) => n.type === "table" }
+        );
       }
     }, []);
 
@@ -84,11 +90,11 @@ export const TableComponent: React.FC<RenderElementProps> = memo(
     const dragMoveFunc = (e: React.MouseEvent) => {
       if (startKey && table) {
         if (!e.target) return;
-        const cell = (e.target as HTMLBaseElement).closest('td');
+        const cell = (e.target as HTMLBaseElement).closest("td");
 
         if (!cell) return;
 
-        let endKey = cell.getAttribute('data-key');
+        let endKey = cell.getAttribute("data-key");
         const [endNode] = Editor.nodes(editor, {
           match: (n) => n.key === endKey,
           at: [],
@@ -106,8 +112,8 @@ export const TableComponent: React.FC<RenderElementProps> = memo(
     const handleMouseDown = useCallback(
       (e) => {
         if (selected) {
-          const cell = (e.target as HTMLBaseElement).closest('td');
-          const key = cell?.getAttribute('data-key') || '';
+          const cell = (e.target as HTMLBaseElement).closest("td");
+          const key = cell?.getAttribute("data-key") || "";
           setStartKey(key);
         }
       },
@@ -115,7 +121,7 @@ export const TableComponent: React.FC<RenderElementProps> = memo(
     );
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: "relative" }}>
         {selected && table && ref.current && (
           <VerticalToolbar table={ref.current} tableNode={table} />
         )}
@@ -132,17 +138,21 @@ export const TableComponent: React.FC<RenderElementProps> = memo(
             onMouseDown={handleMouseDown}
             onMouseMove={dragMoveFunc}
             onMouseUp={() => {
-              setStartKey('');
+              setStartKey("");
               // resizeTable();
             }}
             onMouseLeave={() => {
-              setStartKey('');
+              setStartKey("");
             }}
           >
             <tbody slate-table-element="tbody">{children}</tbody>
           </table>
         </div>
-        {<TableTools className={`table-cardbar ${selected ? 'selected' : null} `} />}
+        {
+          <TableTools
+            className={`table-cardbar ${selected ? "selected" : null} `}
+          />
+        }
       </div>
     );
   }
@@ -165,14 +175,14 @@ export const CellComponent: React.FC<
   return (
     <td
       {...attributes}
-      className={`table-td ${selectedCell ? 'selectedCell' : null}`}
+      className={`table-td ${selectedCell ? "selectedCell" : null}`}
       slate-table-element="td"
       data-key={dataKey}
       colSpan={node.colspan}
       rowSpan={node.rowspan}
       onDragStart={(e) => e.preventDefault()}
       style={{
-        position: 'relative',
+        position: "relative",
         width: node.width ? node.width : options.defaultWidth,
         height: node.height ? node.height : options.defaultHeight,
       }}
