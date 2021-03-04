@@ -2,45 +2,28 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## 启动项目, 开始 demo 使用
 
-In the project directory, you can run:
+git clone 本项目后,执行 ### `yarn` 或 ### `npm i` 进行依赖安装
 
 ### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+打开浏览器访问 [http://localhost:3000](http://localhost:3000)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 主要功能
 
-### `yarn test`
+在 slate 框架基础上进行日常富文本编辑的功能
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. 日常文本编辑, 回车自动换行处理并格式化, 默认为段落;
+2. 支持图片复制粘贴(但未支持移动及拖拽图片);
+3. 支持超大文档 word、excel 列表复制粘贴, 进行了一些性能优化处理;
+4. 支持超链接基础功能, 无需定义协议, 会自动识别 http 或 https 进行跳转;
+5. 数据为 Node 特殊的 json 解构, 可与后端点对点进行修改文件, 也可直接存储全量 json;
+6. 可与任何一种 html 文本进行复制粘贴(部分解析文本可能未处理到)
 
-### `yarn build`
+## 可拓展未实现功能
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. 基础颜色配置、文字对齐、排布等;
+2. 代码块功能, 流程图, 思维导图, 媒体文件(可参考语雀、阿里云效);
+3. 支持 markdown 文本与 html 解析;
+4. 支持 word, pdf, html 文件导入导出;
