@@ -1,6 +1,6 @@
-import "./style.less";
+import './style.less';
 
-import { CellComponent, TableComponent } from "./components/TableElement";
+import { CellComponent, TableComponent } from './components/TableElement';
 import {
   Editable,
   ReactEditor,
@@ -8,18 +8,18 @@ import {
   RenderLeafProps,
   Slate,
   withReact,
-} from "slate-react";
-import { Node, createEditor } from "slate";
-import React, { memo, useCallback, useMemo, useRef } from "react";
+} from 'slate-react';
+import { Node, createEditor } from 'slate';
+import React, { memo, useCallback, useMemo, useRef } from 'react';
 
-import { Image } from "./components/ImageElement";
-import ToolBar from "./components/ToolBar";
-import { withHistory } from "slate-history";
-import withHtml from "./Plugins/withHtml";
-import withImages from "./Plugins/withImages";
-import withLayout from "./Plugins/withLayout";
-import withLinks from "./Plugins/withLinks";
-import withTable from "./Plugins/withTables";
+import { Image } from './components/ImageElement';
+import ToolBar from './components/ToolBar';
+import { withHistory } from 'slate-history';
+import withHtml from './Plugins/withHtml';
+import withImages from './Plugins/withImages';
+import withLayout from './Plugins/withLayout';
+import withLinks from './Plugins/withLinks';
+import withTable from './Plugins/withTables';
 
 interface IEditorProps {
   value: Node[];
@@ -58,14 +58,14 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
     const firstEle = element.children[0].text;
 
     const getEle = {
-      "block-quote": (
+      'block-quote': (
         <blockquote className="quote" {...attributes}>
           {children}
         </blockquote>
       ),
-      "bulleted-list": <ul {...attributes}>{children}</ul>,
+      'bulleted-list': <ul {...attributes}>{children}</ul>,
       subject: (
-        <h1 {...attributes} style={{ position: "relative" }}>
+        <h1 {...attributes} style={{ position: 'relative' }}>
           {children}
           {!firstEle && (
             <span className={`placeholder`} contentEditable={false}>
@@ -74,11 +74,11 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
           )}
         </h1>
       ),
-      "heading-one": <h1 {...attributes}>{children}</h1>,
-      "heading-two": <h2 {...attributes}>{children}</h2>,
-      "heading-three": <h3 {...attributes}>{children}</h3>,
-      "list-item": <li {...attributes}>{children}</li>,
-      "numbered-list": <ol {...attributes}>{children}</ol>,
+      'heading-one': <h1 {...attributes}>{children}</h1>,
+      'heading-two': <h2 {...attributes}>{children}</h2>,
+      'heading-three': <h3 {...attributes}>{children}</h3>,
+      'list-item': <li {...attributes}>{children}</li>,
+      'numbered-list': <ol {...attributes}>{children}</ol>,
       link: (
         <a
           {...attributes}
@@ -90,7 +90,7 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
       ),
       image: <Image {...props} />,
       table: <TableComponent {...props}>{children}</TableComponent>,
-      "table-row": (
+      'table-row': (
         <tr
           {...attributes}
           className="table-tr"
@@ -101,7 +101,7 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
           {children}
         </tr>
       ),
-      "table-cell": (
+      'table-cell': (
         <CellComponent
           {...props}
           dataKey={`${element.key}`}
@@ -110,7 +110,7 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
           {children}
         </CellComponent>
       ),
-      "table-content": (
+      'table-content': (
         <div
           {...attributes}
           slate-table-element="content"
@@ -126,7 +126,7 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
       ),
     };
 
-    return getEle[`${element.type ?? "paragraph"}`];
+    return getEle[`${element.type ?? 'paragraph'}`];
   };
 
   const Leaf = (props: RenderLeafProps) => {
@@ -156,7 +156,7 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
 
   return (
     <div
-      className={`customEditor ${readOnly ? "readonly" : null}`}
+      className={`customEditor ${readOnly ? 'readonly' : null}`}
       ref={editorRef}
     >
       <Slate editor={editor} value={value} onChange={onChange}>

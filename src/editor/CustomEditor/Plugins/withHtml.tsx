@@ -1,4 +1,4 @@
-import { Editor, Transforms } from 'slate';
+import { Transforms } from 'slate';
 
 import { ReactEditor } from 'slate-react';
 import { createContent } from './withTables';
@@ -6,7 +6,7 @@ import { jsx } from 'slate-hyperscript';
 import { options } from '../components/TableElement/options';
 import { v4 as uuid } from 'uuid';
 
-function urlVoid(href) {
+function urlVoid(href: string) {
   if (!href) return '';
   const voidVal = href
     .replace(/\"/g, '%22')
@@ -19,12 +19,12 @@ function urlVoid(href) {
 }
 
 export const ELEMENT_TAGS = {
-  A: (el) => ({ type: 'link', url: urlVoid(el.getAttribute('href')) }),
+  A: (el: any) => ({ type: 'link', url: urlVoid(el.getAttribute('href')) }),
   BLOCKQUOTE: () => ({ type: 'quote' }),
   H1: () => ({ type: 'heading-one' }),
   H2: () => ({ type: 'heading-two' }),
   H3: () => ({ type: 'heading-three' }),
-  IMG: (el) => ({ type: 'image', url: el.getAttribute('href') || '' }),
+  IMG: (el: any) => ({ type: 'image', url: el.getAttribute('href') || '' }),
   LI: () => ({ type: 'list-item' }),
   OL: () => ({ type: 'numbered-list' }),
   UL: () => ({ type: 'bulleted-list' }),
@@ -32,7 +32,7 @@ export const ELEMENT_TAGS = {
   PRE: () => ({ type: 'code' }),
   TABLE: () => ({ type: 'table' }),
   TR: () => ({ type: 'table-row', key: `row_${uuid()}` }),
-  TD: (el) => ({
+  TD: (el: any) => ({
     type: 'table-cell',
     key: `cell_${uuid()}`,
     width: Math.max(parseInt(el.style.width) || 0, options.defaultWidth),
@@ -50,11 +50,14 @@ export const TEXT_TAGS = {
   U: () => ({ underline: true }),
 };
 
-export const deserialize = (el) => {
+export const deserialize = (el: any) => {
   const { nodeName, nodeType } = el;
 
   if (nodeType === 3) {
-    const resText = el.textContent.replace(/\n/g, '').replace(/\r\n/g, '').replace(/\s/g, '');
+    const resText = el.textContent
+      .replace(/\n/g, '')
+      .replace(/\r\n/g, '')
+      .replace(/\s/g, '');
     // console.log(el.textContent.replace(/\n/g, ''));
     return resText;
   } else if (nodeType !== 1) {
@@ -65,7 +68,11 @@ export const deserialize = (el) => {
 
   let parent = el;
 
-  if (nodeName === '' && el.childNodes[0] && el.childNodes[0].nodeName === 'CODE') {
+  if (
+    nodeName === '' &&
+    el.childNodes[0] &&
+    el.childNodes[0].nodeName === 'CODE'
+  ) {
     parent = el.childNodes[0];
   }
 
@@ -79,16 +86,20 @@ export const deserialize = (el) => {
   }
 
   if (nodeName === 'TABLE' || nodeName === 'TBODY' || nodeName === 'TR') {
-    children = children.filter((i) => i?.type);
+    children = children.filter((i: { type: string }) => i?.type);
   }
 
   if (nodeName === 'TD') {
-    children = children.filter((i) => i);
+    children = children.filter((i: Node[]) => i);
 
     if (typeof children[0] === 'string') {
-      children = createContent([{ type: 'paragraph', children: [{ text: children[0] }] }]);
+      children = createContent([
+        { type: 'paragraph', children: [{ text: children[0] }] },
+      ]);
     } else {
-      children = createContent(children.filter((i) => i?.type));
+      children = createContent(
+        children.filter((i: { type: string }) => i?.type)
+      );
     }
   }
 
@@ -108,7 +119,10 @@ const withHtml = (editor: ReactEditor) => {
     const htmlString = data.getData('text/html');
 
     if (htmlString) {
-      const parsedDom = new DOMParser().parseFromString(htmlString, 'text/html');
+      const parsedDom = new DOMParser().parseFromString(
+        htmlString,
+        'text/html'
+      );
 
       let fragment = deserialize(parsedDom.body);
 

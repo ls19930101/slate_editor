@@ -3,7 +3,6 @@ import '../style.less';
 import { isFormatActive, toggleFormat } from '../command';
 
 import { IIconProps } from '../';
-import React from 'react';
 import { Tooltip } from 'antd';
 import { useSlate } from 'slate-react';
 
@@ -19,7 +18,7 @@ const FormatBtn = (props: IIconProps) => {
             ? { color: '#1890ff', backgroundColor: '#f7f7f7' }
             : { color: 'black' }
         }
-        onMouseDown={event => {
+        onMouseDown={(event) => {
           event.preventDefault();
           toggleFormat(editor, format);
         }}

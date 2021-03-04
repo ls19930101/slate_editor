@@ -1,4 +1,4 @@
-import "./style.less";
+import './style.less';
 
 import {
   BoldIcon,
@@ -15,23 +15,22 @@ import {
   StrikethroughIcon,
   TableIcon,
   UnderlineIcon,
-} from "../../../Icons/ToolIcon";
-import { Dropdown, Icon, Menu, Tooltip } from "antd";
-import { Editor, Range } from "slate";
+} from '../../../Icons/ToolIcon';
+import { Dropdown, Icon, Menu, Tooltip } from 'antd';
+import { Editor, Range } from 'slate';
 import React, {
   RefObject,
-  memo,
   useCallback,
   useEffect,
   useRef,
   useState,
-} from "react";
-import { ReactEditor, useSlate } from "slate-react";
-import { isBlockActive, toggleBlock } from "./command";
+} from 'react';
+import { ReactEditor, useSlate } from 'slate-react';
+import { isBlockActive, toggleBlock } from './command';
 
-import FormatBtn from "./components/FormatBtn";
-import { insertLink } from "../../Plugins/withLinks";
-import { insertTable } from "../TableTools/commands";
+import FormatBtn from './components/FormatBtn';
+import { insertLink } from '../../Plugins/withLinks';
+import { insertTable } from '../TableTools/commands';
 
 export interface IIconProps {
   format: string;
@@ -43,70 +42,70 @@ const MenuItem = Menu.Item;
 
 const markConfigs = [
   {
-    format: "bold",
+    format: 'bold',
     icon: <BoldIcon />,
-    title: "加粗",
+    title: '加粗',
   },
   {
-    format: "italic",
+    format: 'italic',
     icon: <ItalicIcon />,
-    title: "斜体",
+    title: '斜体',
   },
   {
-    format: "underline",
+    format: 'underline',
     icon: <UnderlineIcon />,
-    title: "下划线",
+    title: '下划线',
   },
 
   {
-    format: "strike",
+    format: 'strike',
     icon: <StrikethroughIcon />,
-    title: "删除线",
+    title: '删除线',
   },
 
   {
-    format: "code",
+    format: 'code',
     icon: <CodeIcon />,
-    title: "行内代码",
+    title: '行内代码',
   },
 ];
 
 const dropDownConfig = [
   {
-    format: "paragraph",
+    format: 'paragraph',
     icon: <ParagraphIcon />,
-    title: "段落",
+    title: '段落',
   },
 
   {
-    format: "heading-one",
+    format: 'heading-one',
     icon: <H1Icon />,
-    title: "一级标题",
+    title: '一级标题',
   },
   {
-    format: "heading-two",
+    format: 'heading-two',
     icon: <H2Icon />,
-    title: "二级标题",
+    title: '二级标题',
   },
   {
-    format: "heading-three",
+    format: 'heading-three',
     icon: <H3Icon />,
-    title: "三级标题",
+    title: '三级标题',
   },
   {
-    format: "block-quote",
+    format: 'block-quote',
     icon: <QuoteIcon />,
-    title: "引用",
+    title: '引用',
   },
   {
-    format: "bulleted-list",
+    format: 'bulleted-list',
     icon: <BulletedlistIcon />,
-    title: "无序列表",
+    title: '无序列表',
   },
   {
-    format: "numbered-list",
+    format: 'numbered-list',
     icon: <NumberedlistIcon />,
-    title: "有序列表",
+    title: '有序列表',
   },
 ];
 
@@ -118,7 +117,7 @@ interface IToolBarProps {
 
 const ToolBar = (props: IToolBarProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [selected, setSelected] = useState("subject");
+  const [selected, setSelected] = useState('subject');
   const [showTable, setShowTable] = useState<boolean>(true);
   const editor = useSlate();
   const { hold, parentElement, readOnly } = props;
@@ -146,13 +145,13 @@ const ToolBar = (props: IToolBarProps) => {
         });
         // 返回paragraph和list-item上一级
 
-        if (tableLast[0].type === "list-item") {
+        if (tableLast[0].type === 'list-item') {
           const parent = Editor.parent(editor, selection, {
             depth: last[1].length - 1,
           });
           setSelected(`${parent[0].type}`);
         } else {
-          setSelected(`${tableLast[0].type || "paragraph"}`);
+          setSelected(`${tableLast[0].type || 'paragraph'}`);
         }
       }
     }
@@ -161,7 +160,7 @@ const ToolBar = (props: IToolBarProps) => {
       return;
     }
 
-    if (curNode.type === "table") {
+    if (curNode.type === 'table') {
       setShowTable(false);
     } else if (curNode && !showTable) {
       setShowTable(true);
@@ -180,9 +179,9 @@ const ToolBar = (props: IToolBarProps) => {
       !selection ||
       !ReactEditor.isFocused(editor) ||
       Range.isCollapsed(selection) ||
-      Editor.string(editor, selection) === ""
+      Editor.string(editor, selection) === ''
     ) {
-      el.removeAttribute("style");
+      el.removeAttribute('style');
       return;
     }
 
@@ -194,7 +193,7 @@ const ToolBar = (props: IToolBarProps) => {
       const domRange = domSelection.getRangeAt(0);
       const rect = domRange.getBoundingClientRect();
 
-      el.style.opacity = "1";
+      el.style.opacity = '1';
       el.style.top = `${rect.top - parentTop + rect.height + 8}px`;
       el.style.left = `${rect.left - parentLeft}px`;
     }
@@ -206,7 +205,7 @@ const ToolBar = (props: IToolBarProps) => {
 
   const moreFunc = showTable && (
     <div
-      key={"table"}
+      key={'table'}
       className="iconContainer"
       onMouseDown={(e) => {
         e.preventDefault();
@@ -244,47 +243,45 @@ const ToolBar = (props: IToolBarProps) => {
 
   const current = dropDownConfig.find((i) => i.format === selected);
 
-  return (
-    !readOnly && (
-      <div ref={ref} className={`toolbar ${hold && "fixed"}`}>
-        {selected === "subject" ? null : (
-          <Dropdown
-            overlay={blockMenu}
-            trigger={["click"]}
-            getPopupContainer={(triggerNode) => triggerNode}
-          >
-            <Tooltip title={current?.title}>
-              <div className="withDown" onMouseDown={(e) => e.preventDefault()}>
-                <span style={{ fontSize: "black" }}>{current?.icon}</span>
-                <Icon type="down" className="dropDown" />
-              </div>
-            </Tooltip>
-          </Dropdown>
-        )}
-        <div style={{ width: 1, backgroundColor: "#f0f0f0" }} />
-        {withTipMarks}
-        <div
-          className="iconContainer"
-          style={
-            isBlockActive(editor, "link")
-              ? { color: "#1890ff", backgroundColor: "#f7f7f7" }
-              : { color: "black" }
-          }
-          onMouseDown={(e) => {
-            e.preventDefault();
-            const url = window.prompt("Enter the URL of the link:");
-            if (!url) return;
-            insertLink(editor, url);
-          }}
+  return !readOnly ? (
+    <div ref={ref} className={`toolbar ${hold && 'fixed'}`}>
+      {selected === 'subject' ? null : (
+        <Dropdown
+          overlay={blockMenu}
+          trigger={['click']}
+          getPopupContainer={(triggerNode) => triggerNode}
         >
-          <Tooltip title="链接">
-            <LinkIcon />
+          <Tooltip title={current?.title}>
+            <div className="withDown" onMouseDown={(e) => e.preventDefault()}>
+              <span style={{ fontSize: 'black' }}>{current?.icon}</span>
+              <Icon type="down" className="dropDown" />
+            </div>
           </Tooltip>
-        </div>
-        {moreFunc}
+        </Dropdown>
+      )}
+      <div style={{ width: 1, backgroundColor: '#f0f0f0' }} />
+      {withTipMarks}
+      <div
+        className="iconContainer"
+        style={
+          isBlockActive(editor, 'link')
+            ? { color: '#1890ff', backgroundColor: '#f7f7f7' }
+            : { color: 'black' }
+        }
+        onMouseDown={(e) => {
+          e.preventDefault();
+          const url = window.prompt('Enter the URL of the link:');
+          if (!url) return;
+          insertLink(editor, url);
+        }}
+      >
+        <Tooltip title="链接">
+          <LinkIcon />
+        </Tooltip>
       </div>
-    )
-  );
+      {moreFunc}
+    </div>
+  ) : null;
 };
 
-export default memo(ToolBar);
+export default ToolBar;

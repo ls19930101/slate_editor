@@ -51,9 +51,9 @@ export function insertBelow(table: NodeEntry, editor: Editor) {
     match: (n) => n.type === 'table-row',
   });
 
-  for (let i = 1; i < startCell[0].rowspan; i++) {
-    path[yIndex] += 1;
-  }
+  // for (let i = 1; i < startCell[0].rowspan; i++) {
+  //   path[yIndex] += 1;
+  // }
 
   Transforms.insertNodes(editor, newRow, {
     at: Path.next(path),

@@ -2,7 +2,7 @@ import { RenderElementProps, useFocused, useSelected } from 'slate-react';
 
 import React from 'react';
 
-export const Image: React.FC<RenderElementProps> = (props) => {
+export  const Image: React.FC<RenderElementProps> = (props) => {
   const { attributes, children, element } = props;
 
   const selected = useSelected();

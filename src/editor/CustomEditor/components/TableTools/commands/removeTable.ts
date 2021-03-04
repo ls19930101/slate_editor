@@ -1,4 +1,4 @@
-import { Editor, NodeEntry, Path, Point, Transforms } from 'slate';
+import { Editor, NodeEntry, Transforms } from 'slate';
 
 export const removeTable = (table: NodeEntry, editor: Editor) => {
   if (table && editor) {

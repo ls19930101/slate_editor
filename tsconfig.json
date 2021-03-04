@@ -3,7 +3,10 @@
     "outDir": "build/dist",
     "module": "esnext",
     "target": "esnext",
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "sourceMap": true,
     "baseUrl": ".",
     "jsx": "react-jsx",
@@ -23,6 +26,16 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src", "src/.eslintrc.js", "config-overrides.js"],
-  "exclude": ["node_modules", "build", "dist", "scripts", "webpack", "jest"]
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "scripts",
+    "src/.umi/*",
+    "webpack",
+    "jest"
+  ],
+  "include": [
+    "src"
+  ]
 }

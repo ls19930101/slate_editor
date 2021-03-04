@@ -9,7 +9,7 @@ import {
   RemoveRowIcon,
   RemoveTableIcon,
 } from '../../../Icons/TableIcon';
-import React, { HtmlHTMLAttributes, memo } from 'react';
+import { HtmlHTMLAttributes, memo } from 'react';
 import {
   insertAbove,
   insertBelow,
@@ -92,7 +92,7 @@ const TableTools = (props: ITableToolProps) => {
     <div
       className={props.className}
       contentEditable={false}
-      style={readOnly ? { display: 'none' } : null}
+      style={readOnly ? { display: 'none' }:undefined }
     >
       <Button.Group>{Tools}</Button.Group>
     </div>

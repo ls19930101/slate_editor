@@ -10,7 +10,11 @@ const DEFAULT_STYLE = {
 };
 
 const CaseBaseIcon: React.FC<IIconProps> = ({ style, ...rest }) => (
-  <Icon component={CaseBaseSvg} style={{ ...DEFAULT_STYLE, ...style }} {...rest} />
+  <Icon
+    component={CaseBaseSvg}
+    style={{ ...DEFAULT_STYLE, ...style }}
+    {...rest}
+  />
 );
 
 export default React.memo<IIconProps>(CaseBaseIcon);

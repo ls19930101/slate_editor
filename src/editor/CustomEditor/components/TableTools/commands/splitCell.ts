@@ -72,9 +72,11 @@ export function splitCell(table: NodeEntry, editor: Editor) {
           const newPath = Array.from(originPath);
           newPath[yIndex] += i;
 
+          
           const newCell = createCell({
             width: 0,
             height: 0,
+              // @ts-ignore
             elements:
               i === 0 && j === colspan - 1
                 ? Array.isArray(children[0].children) && children[0].children

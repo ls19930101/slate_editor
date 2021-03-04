@@ -259,7 +259,14 @@ export const VerticalToolbar: React.FC<{
     setRows(() => rowsArray);
   }, [editor, table, tableNode]);
 
-  const onHandleDrag = ({ item, index }) => {
+  
+interface IProps{
+  item:any,
+  index:number
+}
+
+  const onHandleDrag = (props:IProps) => {
+    const {item,index} = props;
     if (heightFnObject[index]) {
       return heightFnObject[index];
     }
