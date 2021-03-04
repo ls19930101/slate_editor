@@ -4,7 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## 启动项目, 开始 demo 使用
 
-git clone 本项目后,执行 ### `yarn` 或 ### `npm i` 进行依赖安装
+git clone 本项目后,执行 
+### `yarn` 或  `npm i` 进行依赖安装
 
 ### `yarn start`
 
