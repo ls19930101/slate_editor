@@ -14,12 +14,12 @@ export function splitCell(table: NodeEntry, editor: Editor) {
 
   const [start, end] = Editor.edges(editor, selection);
   const [startNode] = Editor.nodes(editor, {
-    match: n => n.type === 'table-cell',
+    match: (n) => n.type === 'table-cell',
     at: start,
   });
 
   const [endNode] = Editor.nodes(editor, {
-    match: n => n.type === 'table-cell',
+    match: (n) => n.type === 'table-cell',
     at: end,
   });
 
@@ -40,7 +40,9 @@ export function splitCell(table: NodeEntry, editor: Editor) {
     const [y, x] = n.path.slice(yIndex, xIndex + 1);
     if (y >= yStart && y <= yEnd && x >= xStart && x <= xEnd) {
       if (!n.isReal) {
-        const [sourceCell] = getCol((s: Col) => s.isReal && s.cell.key === n.cell.key);
+        const [sourceCell] = getCol(
+          (s: Col) => s.isReal && s.cell.key === n.cell.key
+        );
         sourceCells.push(sourceCell);
       }
       return true;
@@ -51,12 +53,15 @@ export function splitCell(table: NodeEntry, editor: Editor) {
 
   selectedCols.push(...sourceCells);
 
-  const filterColsObject = selectedCols.reduce((p: { [key: string]: Col }, c: Col) => {
-    if (c.isReal) {
-      p[c.cell.key] = c;
-    }
-    return p;
-  }, {}) as { [key: string]: Col };
+  const filterColsObject = selectedCols.reduce(
+    (p: { [key: string]: Col }, c: Col) => {
+      if (c.isReal) {
+        p[c.cell.key] = c;
+      }
+      return p;
+    },
+    {}
+  ) as { [key: string]: Col };
 
   Object.values(filterColsObject).forEach((col: Col) => {
     const { cell, isReal, originPath } = col;
@@ -72,15 +77,15 @@ export function splitCell(table: NodeEntry, editor: Editor) {
           const newPath = Array.from(originPath);
           newPath[yIndex] += i;
 
-          
           const newCell = createCell({
             width: 0,
             height: 0,
-              // @ts-ignore
             elements:
               i === 0 && j === colspan - 1
-                ? Array.isArray(children[0].children) && children[0].children
-                : null,
+                ? Array.isArray(children[0].children)
+                  ? children[0].children
+                  : undefined
+                : undefined,
           });
 
           Transforms.insertNodes(editor, newCell, {

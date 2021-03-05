@@ -1,4 +1,12 @@
-import { Editor, Element, Node, NodeEntry, Path, Range, Transforms } from 'slate';
+import {
+  Editor,
+  Element,
+  Node,
+  NodeEntry,
+  Path,
+  Range,
+  Transforms,
+} from 'slate';
 
 import { ReactEditor } from 'slate-react';
 
@@ -41,7 +49,11 @@ const withLayout = (editor: ReactEditor) => {
 
         /** 删除段落中空的行内元素，如link和text */
         const childString = Editor.string(editor, childPath);
-        if (Element.isElement(child) && editor.isInline(child) && !childString) {
+        if (
+          Element.isElement(child) &&
+          editor.isInline(child) &&
+          !childString
+        ) {
           Transforms.unwrapNodes(editor, { at: childPath });
         }
       }
@@ -67,11 +79,15 @@ const withLayout = (editor: ReactEditor) => {
     // console.log(parent, Editor.string(editor, parent[1]));
 
     if (selection && Range.isCollapsed(selection)) {
-      // 回车格式化保留之前的mark形式,若改node未起始点则回车先转化未paragraph
+      // 回车格式化保留之前的mark形式,若该node为起始点则回车先转化为paragraph
       const isNotParagraph = parent[0].type && parent[0].type !== 'paragraph';
-      if (!parentSting && selection.anchor.offset === 0 && parent && isNotParagraph) {
+      if (
+        !parentSting &&
+        selection.anchor.offset === 0 &&
+        parent &&
+        isNotParagraph
+      ) {
         Transforms.setNodes(editor, { type: 'paragraph' });
-        console.log('==');
         if (parentPath > 1 && parentType === 'list-item') {
           Transforms.liftNodes(editor, {
             match: (n) => n.type === 'paragraph',
@@ -95,7 +111,11 @@ const withLayout = (editor: ReactEditor) => {
     // const node = Editor.next(editor, { at: selection });
     // console.log(selection, node, parent);
 
-    if (selection.anchor.offset === 0 && parentType && parentType !== 'paragraph') {
+    if (
+      selection.anchor.offset === 0 &&
+      parentType &&
+      parentType !== 'paragraph'
+    ) {
       Transforms.setNodes(editor, { type: 'paragraph' });
       // 层级大于1时，提升当前node置顶
       if (selection.anchor.path.length > 2 && parentType === 'list-item') {
@@ -111,10 +131,14 @@ const withLayout = (editor: ReactEditor) => {
   return editor;
 };
 
+//格式化table和image前后为空格
 export const PreserveSpaceAfter = new Set(['table', 'image']);
 export const PreserveSpaceBefore = new Set(['table', 'image']);
 
-const maybePreserveSpace = (editor: ReactEditor, entry: NodeEntry): boolean | void => {
+const maybePreserveSpace = (
+  editor: ReactEditor,
+  entry: NodeEntry
+): boolean | void => {
   const [node, path] = entry;
 
   // console.log(node, path);
@@ -125,14 +149,22 @@ const maybePreserveSpace = (editor: ReactEditor, entry: NodeEntry): boolean | vo
   if (PreserveSpaceAfter.has(`${type}`)) {
     const next = Editor.next(editor, { at: path });
     if (!next || PreserveSpaceBefore.has(`${next[0].type}`)) {
-      Transforms.insertNodes(editor, { children: [{ text: '' }] }, { at: Path.next(path) });
+      Transforms.insertNodes(
+        editor,
+        { children: [{ text: '' }] },
+        { at: Path.next(path) }
+      );
       preserved = true;
     }
   }
 
   if (PreserveSpaceBefore.has(`${type}`)) {
     if (path[path.length - 1] === 0) {
-      Transforms.insertNodes(editor, { children: [{ text: '' }] }, { at: path });
+      Transforms.insertNodes(
+        editor,
+        { children: [{ text: '' }] },
+        { at: path }
+      );
       preserved = true;
     } else {
       return;

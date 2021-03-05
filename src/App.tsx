@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 import { Button } from 'antd';
-import { Node } from 'slate';
 import CustomEditor from './editor/CustomEditor';
+import { Node } from 'slate';
 
 const App: React.FC<{}> = (props) => {
   const [val, setVal] = useState<Node[]>([
-    { children: [{ type: 'subject', children: [{ text: '' }] }] },
+    { type: 'subject', children: [{ text: '' }] },
   ]);
   const [readOnly, setReadOnly] = useState(false);
 
