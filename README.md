@@ -5,7 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## 启动项目, 开始 demo 使用
 
 git clone 本项目后,执行 
-###  依赖安装
+### `dsds`  依赖安装
 `yarn` 或  `npm i`
 
 ### 启动项目
