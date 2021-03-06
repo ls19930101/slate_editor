@@ -55,6 +55,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "less": "^3.13.1",
     "less-loader": "4.1",
+    "prismjs": "1.5.1",
     "react-use": "^17.1.1"
   }
 }

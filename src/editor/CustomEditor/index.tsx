@@ -9,10 +9,11 @@ import {
   Slate,
   withReact,
 } from 'slate-react';
-import { Node, createEditor } from 'slate';
+import { Node, NodeEntry, Text, createEditor } from 'slate';
 import React, { memo, useCallback, useMemo, useRef } from 'react';
 
 import { Image } from './components/ImageElement';
+import Prism from 'prismjs';
 import ToolBar from './components/ToolBar';
 import { withHistory } from 'slate-history';
 import withHtml from './Plugins/withHtml';
@@ -27,6 +28,9 @@ interface IEditorProps {
   readOnly?: boolean;
   style?: React.CSSProperties;
 }
+
+// eslint-disable-next-line
+Prism.languages.markdown=Prism.languages.extend("markup",{}),Prism.languages.insertBefore("markdown","prolog",{blockquote:{pattern:/^>(?:[\t ]*>)*/m,alias:"punctuation"},code:[{pattern:/^(?: {4}|\t).+/m,alias:"keyword"},{pattern:/``.+?``|`[^`\n]+`/,alias:"keyword"}],title:[{pattern:/\w+.*(?:\r?\n|\r)(?:==+|--+)/,alias:"important",inside:{punctuation:/==+$|--+$/}},{pattern:/(^\s*)#+.+/m,lookbehind:!0,alias:"important",inside:{punctuation:/^#+|#+$/}}],hr:{pattern:/(^\s*)([*-])([\t ]*\2){2,}(?=\s*$)/m,lookbehind:!0,alias:"punctuation"},list:{pattern:/(^\s*)(?:[*+-]|\d+\.)(?=[\t ].)/m,lookbehind:!0,alias:"punctuation"},"url-reference":{pattern:/!?\[[^\]]+\]:[\t ]+(?:\S+|<(?:\\.|[^>\\])+>)(?:[\t ]+(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\)))?/,inside:{variable:{pattern:/^(!?\[)[^\]]+/,lookbehind:!0},string:/(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\))$/,punctuation:/^[\[\]!:]|[<>]/},alias:"url"},bold:{pattern:/(^|[^\\])(\*\*|__)(?:(?:\r?\n|\r)(?!\r?\n|\r)|.)+?\2/,lookbehind:!0,inside:{punctuation:/^\*\*|^__|\*\*$|__$/}},italic:{pattern:/(^|[^\\])([*_])(?:(?:\r?\n|\r)(?!\r?\n|\r)|.)+?\2/,lookbehind:!0,inside:{punctuation:/^[*_]|[*_]$/}},url:{pattern:/!?\[[^\]]+\](?:\([^\s)]+(?:[\t ]+"(?:\\.|[^"\\])*")?\)| ?\[[^\]\n]*\])/,inside:{variable:{pattern:/(!?\[)[^\]]+(?=\]$)/,lookbehind:!0},string:{pattern:/"(?:\\.|[^"\\])*"(?=\)$)/}}}}),Prism.languages.markdown.bold.inside.url=Prism.util.clone(Prism.languages.markdown.url),Prism.languages.markdown.italic.inside.url=Prism.util.clone(Prism.languages.markdown.url),Prism.languages.markdown.bold.inside.italic=Prism.util.clone(Prism.languages.markdown.italic),Prism.languages.markdown.italic.inside.bold=Prism.util.clone(Prism.languages.markdown.bold); // prettier-ignore
 
 const CustomEditor = (props: IEditorProps): React.ReactElement => {
   const editorRef = useRef<HTMLDivElement>(null);
@@ -48,6 +52,47 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
 
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
+
+  const decorate = useCallback(([node, path]: NodeEntry) => {
+    const ranges: any[] = [];
+
+    if (!Text.isText(node)) {
+      return ranges;
+    }
+
+    const getLength = (token: any) => {
+      if (typeof token === 'string') {
+        return token.length;
+      } else if (typeof token.content === 'string') {
+        return token.content.length;
+      } else {
+        return token.content.reduce(
+          (l: string, t: string) => l + getLength(t),
+          0
+        );
+      }
+    };
+
+    const tokens = Prism.tokenize(node.text, Prism.languages.markdown);
+    let start = 0;
+
+    for (const token of tokens) {
+      const length = getLength(token);
+      const end = start + length;
+
+      if (typeof token !== 'string') {
+        ranges.push({
+          [token.type]: true,
+          anchor: { path, offset: start },
+          focus: { path, offset: end },
+        });
+      }
+
+      start = end;
+    }
+
+    return ranges;
+  }, []);
 
   // Render the Slate context.
 
@@ -131,12 +176,18 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
 
   const Leaf = (props: RenderLeafProps) => {
     let { leaf, attributes, children } = props;
+
+    // Prism来支持markdown语法
+    let classConf: string = '';
+
     if (leaf.bold) {
-      children = <strong>{children}</strong>;
+      classConf = 'bold';
+      // children = <strong>{children}</strong>;
     }
 
     if (leaf.italic) {
-      children = <em>{children}</em>;
+      classConf = 'italic';
+      // children = <em>{children}</em>;
     }
 
     if (leaf.underline) {
@@ -147,11 +198,23 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
       children = <s>{children}</s>;
     }
 
-    if (leaf.code) {
-      children = <code className="slate-code">{children}</code>;
+    if (leaf.blockquote) {
+      classConf = 'blockquote';
     }
 
-    return <span {...attributes}>{children}</span>;
+    if (leaf.code) {
+      classConf = 'code';
+      // children = <code className="slate-code">{children}</code>;
+    }
+    if (leaf.hr) {
+      classConf = 'hr';
+    }
+
+    return (
+      <span {...attributes} className={classConf}>
+        {children}
+      </span>
+    );
   };
 
   return (
@@ -163,6 +226,7 @@ const CustomEditor = (props: IEditorProps): React.ReactElement => {
         <ToolBar hold readOnly={readOnly} />
         <ToolBar parentElement={editorRef} readOnly={readOnly} />
         <Editable
+          decorate={decorate}
           className="editor"
           style={style}
           autoFocus

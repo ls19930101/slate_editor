@@ -9315,6 +9315,11 @@ pretty-format@^26.0.0, pretty-format@^26.6.0, pretty-format@^26.6.2:
     ansi-styles "^4.0.0"
     react-is "^17.0.1"
 
+prismjs@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.npm.taobao.org/prismjs/download/prismjs-1.5.1.tgz#224990100ff6c2a7588d086be1a5ac62e83690f7"
+  integrity sha1-IkmQEA/2wqdYjQhr4aWsYug2kPc=
+
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
